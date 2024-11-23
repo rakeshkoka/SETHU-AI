@@ -4,7 +4,7 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ManagementTable from "../ManagementTable"; // Reusable ManagementTable component
-import StudentManagement from "../services/StudentManagement"; // Student API for fetching data
+import axios from "axios";
 
 function Student() {
     const [rows, setRows] = useState([]); // Table rows state
@@ -15,7 +15,7 @@ function Student() {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const data = await StudentManagement(); // Call the function to fetch student data
+            const data = await axios.get("http://157.173.222.203:9000/users"); // Call the function to fetch student data
             setRows(data); // Set the data to the rows state
         } catch (error) {
             console.error("Error fetching student data:", error);

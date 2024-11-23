@@ -1,12 +1,15 @@
 import { IconButton } from "@mui/material";
 import ManagementTable from "../ManagementTable";
-import AdminManagement from "../services/AdminManagement";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import axios from "axios";
 import { useEffect, useState } from "react";
 import EditDialog from "../dialogBox Edit Form/Dialog";
+import { fetchTenant } from "../../../../../../API's/Tenant_API's";
+import { editTenant } from "../../../../../../API's/Tenant_API's";
+import { createTenant } from "../../../../../../API's/Tenant_API's";
+import { deleteTenant } from "../../../../../../API's/Tenant_API's";
+import { Toaster, toast } from "react-hot-toast"
 
 function Admin() {
 
@@ -17,11 +20,13 @@ function Admin() {
     const [error, setError] = useState(null); // Error state
     const [isEditing, setIsEditing] = useState(false);
 
+    var notify = (text) => toast.success(text);
+
     // Fetch data from the API
     const fetchData = async () => {
         try {
             setLoading(true);
-            const data = await AdminManagement(); // Call the updated AdminManagement function
+            const data = await fetchTenant();
             setRows(data); // Set the rows state with the fetched data
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -83,13 +88,15 @@ function Admin() {
             // Confirm deletion with the user (optional, but recommended)
             const confirmDelete = window.confirm("Are you sure you want to delete this tenant?");
             if (!confirmDelete) return; // Stop if the user cancels the action
-            
+
             // Send delete request
-            await axios.delete(`http://157.173.222.203:9000/tenants/${id}`);
-            
+            // await axios.delete(`http://157.173.222.203:9000/tenants/${id}`);
+            const deletedTenant = await deleteTenant(id);
+            console.log(deletedTenant.message);
+
             // Optional: Notify the user about successful deletion
-            alert("Tenant deleted successfully");
-            
+            notify("Tenant deleted");
+
             // Refresh the data to reflect changes in the UI
             fetchData();  // Ensure fetchData() is defined in your component
         } catch (error) {
@@ -108,7 +115,7 @@ function Admin() {
             }
         }
     };
-    
+
 
     //function to close editDialog form
     const handleClose = () => {
@@ -128,21 +135,26 @@ function Admin() {
 
     const handleFormSubmit = async () => {
         console.log(selectedRow);
+
         const formattedData = {
             ...selectedRow,
             credits: parseInt(selectedRow.credits, 10) || 0, // Convert to number
             id: parseInt(selectedRow.id, 10) || 0, // Convert to number
         };
+
         console.log(formattedData);
         try {
             if (isEditing) {
                 // Update existing user
-                await axios.put(`http://157.173.222.203:9000/tenants/${selectedRow.id}`, selectedRow);
-                alert('Data Updated Successfully');
+                const updatedTenant = await editTenant(selectedRow.id, selectedRow);
+                console.log(updatedTenant);
+                notify('Updated Succesfully');
+
             } else {
                 // Create new user
-                await axios.post(`http://157.173.222.203:9000/tenants`, formattedData);
-                alert('New User Created Successfully');
+                const createdTenant = await createTenant(formattedData);
+                console.log(createdTenant);
+                notify('Tenant Created');
             }
             fetchData(); // Refresh data to update the UI
             handleClose(); // Close the dialog
@@ -173,6 +185,7 @@ function Admin() {
 
     return (
         <>
+            <Toaster />
             <AddIcon sx={{ fontSize: 30 }} onClick={createAdmin} />
             <ManagementTable
                 columns={columns}
@@ -180,14 +193,6 @@ function Admin() {
                 loading={loading}
                 error={error}
             />
-
-            {/* <CreateDialogBox
-                onClick={createAdmin}
-                open={open}
-                handleClose={handleClose}
-                handleFormSubmit={handleFormSubmit}
-                handleInputChange={handleInputChange}
-            /> */}
 
             <EditDialog
                 open={open}
