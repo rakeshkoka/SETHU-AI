@@ -1,14 +1,14 @@
-import { IconButton } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import ManagementTable from "../ManagementTable";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from "react";
 import EditDialog from "../dialogBox Edit Form/Dialog";
-import { fetchTenant } from "../../../../../../API's/Tenant_API's";
-import { editTenant } from "../../../../../../API's/Tenant_API's";
-import { createTenant } from "../../../../../../API's/Tenant_API's";
-import { deleteTenant } from "../../../../../../API's/Tenant_API's";
+import { fetchTenant } from "../../../../../../API's/Tenant";
+import { editTenant } from "../../../../../../API's/Tenant";
+import { createTenant } from "../../../../../../API's/Tenant";
+import { deleteTenant } from "../../../../../../API's/Tenant";
 import { Toaster, toast } from "react-hot-toast"
 
 function Admin() {
@@ -35,6 +35,20 @@ function Admin() {
             setLoading(false);
         }
     };
+
+    const tenantFields = [
+        { name: 'name', label: 'Name', type: 'text' },
+        { name: 'email_id', label: 'Email', type: 'email' },
+        { name: 'password', label: 'Password', type: 'password', createOnly: true },
+        { name: 'phone', label: 'Mobile', type: 'text' },
+        { name: 'status', label: 'Status', type: 'select', options: ['Active', 'Inactive', 'Suspended', 'Permanent Suspended'] },
+        { name: 'validity_start', label: 'Validity Start', type: 'text', createOnly: true },
+        { name: 'validity_end', label: 'Validity End', type: 'text' },
+        // Fields specific to create mode
+        { name: 'credits', label: 'Credits', type: 'number', createOnly: true },
+        { name: 'address', label: 'Address', type: 'text', createOnly: true },
+        { name: 'description', label: 'Description', type: 'text', createOnly: true },
+    ];
 
     const columns = [
         { field: 'id', headerName: 'ID', flex: 0.5 },
@@ -139,7 +153,6 @@ function Admin() {
         const formattedData = {
             ...selectedRow,
             credits: parseInt(selectedRow.credits, 10) || 0, // Convert to number
-            id: parseInt(selectedRow.id, 10) || 0, // Convert to number
         };
 
         console.log(formattedData);
@@ -164,7 +177,7 @@ function Admin() {
     };
 
     //function to create admin
-    const createAdmin = () => {
+    const createNewTenant = () => {
         setSelectedRow({
             name: "",
             email_id: "",
@@ -185,8 +198,21 @@ function Admin() {
 
     return (
         <>
+            <h3>Tenant Management</h3>
             <Toaster />
-            <AddIcon sx={{ fontSize: 30 }} onClick={createAdmin} />
+
+            {/* old button */}
+            {/* <AddIcon sx={{ fontSize: 30 }} onClick={createNewTenant} /> */}
+            {/* new button */}
+            <Button
+                variant="contained" // or "outlined" for a different look
+                startIcon={<AddIcon />}
+                onClick={createNewTenant}
+                sx={{ marginBottom: 2 }}
+            >
+                Add
+            </Button>
+
             <ManagementTable
                 columns={columns}
                 rows={rows}
@@ -201,6 +227,8 @@ function Admin() {
                 handleInputChange={handleInputChange}
                 handleFormSubmit={handleFormSubmit}
                 isEditing={isEditing}
+                fields={tenantFields}
+                entityType={"Tenant"}
             />
         </>
     )

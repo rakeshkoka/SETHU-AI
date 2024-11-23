@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://157.173.222.203:9000/tenants";
+const API_BASE_URL = "http://157.173.222.203:9000/users";
 
-// Function to fetch data from the '/tenants' endpoint
-export const fetchTenant = async () => {
+//get user
+export const fetchUser = async () => {
     try {
         const response = await fetch(`${API_BASE_URL}`);
 
@@ -15,33 +15,35 @@ export const fetchTenant = async () => {
         return data;
 
     } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
         throw error;
     }
 };
 
-export const editTenant = async (id, updatedData) => {
+//Edit user
+export const editUser = async (id, updatedData) => {
     try {
         const response = await axios.put(`${API_BASE_URL}/${id}`, updatedData);
         return response.data;
     } catch (error) {
-        console.error("Error fetching data:", error);
+        console.log("Error Editing Users", error);
         throw error;
     }
 };
 
-export const createTenant = async (newTenantData) => {
+//create user
+export const createUser = async (newUserData) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}`, newTenantData);
+        const response = await axios.post(`${API_BASE_URL}`, newUserData);
         return response.data;
-
     } catch (error) {
-        console.error("Error creating tenant data:", error);
-        throw error;
+        console.log("Error Creating User:", error);
+        throw error
     }
 };
 
-export const deleteTenant = async (id) => {
+//delete user
+export const deleteUser = async (id) => {
     try {
         const response = await axios.delete(`${API_BASE_URL}/${id}`);
         return response.data;
