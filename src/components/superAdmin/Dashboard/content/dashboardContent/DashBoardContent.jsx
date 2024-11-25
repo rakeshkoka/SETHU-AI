@@ -5,26 +5,30 @@ import SchoolIcon from '@mui/icons-material/School';
 import PeopleIcon from '@mui/icons-material/People';
 import { Card } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import { Link } from 'react-router-dom';
 
 const DashboardContent = () => {
     const stats = [
         {
-            title: 'Total Students',
+            title: 'Schools',
             value: '1,234',
             icon: <SchoolIcon sx={{ fontSize: 40, color: '#1976d2' }} />,
-            color: '#e3f2fd'
+            color: '#e3f2fd',
+            path: '/schools'
         },
         {
             title: 'Total Courses',
             value: '42',
             icon: <LibraryBooksIcon sx={{ fontSize: 40, color: '#2e7d32' }} />,
-            color: '#e8f5e9'
+            color: '#e8f5e9',
+            path: '/courses'
         },
         {
             title: 'Active Users',
             value: '892',
             icon: <PeopleIcon sx={{ fontSize: 40, color: '#ed6c02' }} />,
-            color: '#fff3e0'
+            color: '#fff3e0',
+            path: '/users'
         }
     ];
 
@@ -36,14 +40,27 @@ const DashboardContent = () => {
 
             <Grid container spacing={3}>
                 {stats.map((item) => (
-                    <Grid item xs={12} sm={6} md={4} key={item.title}>
+                    <Grid item
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        key={item.title}
+                        component={Link}
+                        to={item.path}
+                        sx={{
+                            textDecoration: 'none',
+                            maxWidth: '250px',
+                            flexGrow: 1
+                        }}
+                        className='w-25'
+                    >
                         <Card
                             sx={{
                                 py: 5,
                                 boxShadow: 0,
                                 textAlign: 'center',
                                 backgroundColor: item.color,
-                                borderRadius: 4
+                                borderRadius: 4,
                             }}
                         >
                             <Box
@@ -51,18 +68,18 @@ const DashboardContent = () => {
                                     mb: 2,
                                     display: 'flex',
                                     alignItems: 'center',
-                                    justifyContent: 'center'
+                                    justifyContent: 'center',
                                 }}
                             >
                                 {item.icon}
                             </Box>
 
-                            <Typography variant="h3" sx={{ mb: 1 }}>
-                                {item.value}
+                            <Typography variant="h5" sx={{ mb: 1 }} >
+                                {item.title}
                             </Typography>
 
-                            <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-                                {item.title}
+                            <Typography variant="h6" sx={{ opacity: 0.72 }}>
+                                {item.value}
                             </Typography>
                         </Card>
                     </Grid>
