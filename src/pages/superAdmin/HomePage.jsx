@@ -1,4 +1,4 @@
-import OffCanvas from "../components/superAdmin/Dashboard/offCanvas/OffCanvas"
+import OffCanvas from "../../components/superAdmin/Dashboard/offCanvas/OffCanvas"
 
 
 

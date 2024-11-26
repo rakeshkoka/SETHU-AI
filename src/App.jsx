@@ -3,7 +3,7 @@ import DashboardContent from "./components/superAdmin/Dashboard/content/dashboar
 import ReportsAndAnalytics from "./components/superAdmin/Dashboard/content/reports&Analytics/ReportsAndAnalytics";
 import Settings from "./components/superAdmin/Dashboard/content/settings/Settings";
 import UserManagementContent from "./components/superAdmin/Dashboard/content/userManagementContent/UserManagementContent";
-import HomePage from "./pages/HomePage"
+import HomePage from "./pages/superAdmin/HomePage.jsx"
 import { Route, Routes } from "react-router-dom";
 import Student from "./components/superAdmin/Dashboard/content/userManagementContent/student/Student.jsx"
 import Admin from "./components/superAdmin/Dashboard/content/userManagementContent/admin/Admin.jsx";
